@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,6 @@ import 'package:yure_connect_apps/models/post_model.dart';
 import 'package:yure_connect_apps/provider/post_provider.dart';
 import 'package:yure_connect_apps/utils/AppColors.dart';
 import 'package:yure_connect_apps/utils/app_margin.dart';
-import 'package:yure_connect_apps/views/auth/login.dart';
 
 class Posts extends StatelessWidget {
   const Posts({super.key});
@@ -19,6 +19,8 @@ class Posts extends StatelessWidget {
 
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         slivers: [
           SliverAppBar(
             title: const YureText(
@@ -33,6 +35,12 @@ class Posts extends StatelessWidget {
                 color: Colors.white,
               )
             ],
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              postsProv.mypost();
+            },
           ),
           Consumer<PostProvider>(builder: (context, post, child) {
             return SliverList.builder(
@@ -55,8 +63,11 @@ class Posts extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               width10,
-              const CircleAvatar(
+              CircleAvatar(
                 maxRadius: 20,
+                backgroundImage: NetworkImage(
+                  "${Globals.urlPostImage}/${data.profile.split("\\").last}",
+                ),
               ),
               width10,
               Text(data.user.name),
@@ -141,27 +152,9 @@ class Posts extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
             child: Row(
               children: [
-                likeBtn(),
+                likeBtn(data.likes),
                 width15,
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: const Icon(
-                        FontAwesomeIcons.comment,
-                        size: 24,
-                      ),
-                    ),
-                    width10,
-                    const Text(
-                      "2",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
-                )
+                btnComment(),
               ],
             ),
           ),
@@ -184,7 +177,29 @@ class Posts extends StatelessWidget {
     );
   }
 
-  likeBtn() {
+  Row btnComment() {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () {},
+          child: const Icon(
+            FontAwesomeIcons.comment,
+            size: 24,
+          ),
+        ),
+        width10,
+        const Text(
+          "0",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        )
+      ],
+    );
+  }
+
+  likeBtn(int like) {
     return Row(
       children: [
         InkWell(
@@ -197,10 +212,10 @@ class Posts extends StatelessWidget {
             size: 25,
           ),
         ),
-        SizedBox(width: 10),
-        const Text(
-          "10",
-          style: TextStyle(
+        width10,
+        Text(
+          like.toString(),
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),

@@ -30,4 +30,26 @@ class PostServices {
       throw e.response?.data['message'] ?? 'Terjadi kesalahan saat login.';
     }
   }
+
+  Future<Response> likePost(int postId) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString(Globals.TOKEN_KEY);
+
+    try {
+      final response = await _dio.post(
+        "/liked",
+        data: {"post_id": postId},
+        options: Options(
+          headers: {"Authorization": token},
+        ),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        rethrow;
+      }
+      throw e.response?.data['message'] ?? 'Terjadi kesalahan saat login.';
+    }
+  }
 }

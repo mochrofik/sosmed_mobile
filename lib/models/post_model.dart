@@ -9,14 +9,17 @@ class PostModel {
   final List<FilePostModel> uploadPostings;
   final String createdAt;
   final String updatedAt;
+  final String profile;
+  int likes;
 
-  PostModel({
-    required this.indexImg,
-    required this.id,
-    required this.user,
-    required this.posting,
-    required this.uploadPostings,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+  PostModel(
+      {required this.indexImg,
+      required this.id,
+      required this.user,
+      required this.posting,
+      required this.uploadPostings,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.profile,
+      required this.likes});
 }

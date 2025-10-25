@@ -65,6 +65,8 @@ class PostProvider with ChangeNotifier {
                 name: user['name'],
                 email: user['email'],
               ),
+              likes: element['likes'],
+              profile: user['profile'],
               createdAt: element['created_at'],
               updatedAt: element['updated_at'],
             ),
@@ -76,8 +78,6 @@ class PostProvider with ChangeNotifier {
       if (e.response?.statusCode == 401) {
         _isLoggedIn = false;
       }
-      print("my post try catch");
-      print(e.toString());
     }
 
     notifyListeners();

@@ -1,4 +1,4 @@
-package com.example.yure_connect_apps
+package com.yure_connect_apps
 
 import io.flutter.embedding.android.FlutterActivity
 
