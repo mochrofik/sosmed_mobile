@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:yure_connect_apps/provider/home_provider.dart';
+import 'package:yure_connect_apps/provider/post_provider.dart';
 import 'package:yure_connect_apps/utils/AppColors.dart';
 import 'package:yure_connect_apps/views/home/posts.dart';
 import 'package:yure_connect_apps/views/home/profile.dart';
@@ -23,6 +25,9 @@ class _HomeState extends State<Home> {
       ),
       const Profile(),
     ];
+
+    final postProvider = context.watch<PostProvider>();
+
     return Consumer<HomeProvider>(builder: (context, homeProvider, child) {
       return Scaffold(
           bottomNavigationBar: BottomNavigationBar(
@@ -32,6 +37,10 @@ class _HomeState extends State<Home> {
               onTap: (value) {
                 print(value);
                 homeProvider.currentNavigate(value);
+
+                if (value == 1) {
+                  postProvider.pickImage(ImageSource.gallery);
+                }
               },
               currentIndex: homeProvider.currentBottomNavigate,
               items: const [

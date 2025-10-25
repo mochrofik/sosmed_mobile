@@ -11,6 +11,7 @@ class PostModel {
   final String updatedAt;
   final String profile;
   int likes;
+  bool isLiked;
 
   PostModel(
       {required this.indexImg,
@@ -21,5 +22,6 @@ class PostModel {
       required this.createdAt,
       required this.updatedAt,
       required this.profile,
-      required this.likes});
+      required this.likes,
+      required this.isLiked});
 }

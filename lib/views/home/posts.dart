@@ -152,7 +152,7 @@ class Posts extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
             child: Row(
               children: [
-                likeBtn(data.likes),
+                likeBtn(post, data),
                 width15,
                 btnComment(),
               ],
@@ -199,22 +199,22 @@ class Posts extends StatelessWidget {
     );
   }
 
-  likeBtn(int like) {
+  likeBtn(PostProvider post, PostModel data) {
     return Row(
       children: [
         InkWell(
-          onTap: () {},
-          child: const Icon(
-            Icons.thumb_up_alt_outlined,
-            // Icons.thumb_up_alt,
-            // color: Appcolors.primaryColor,
-            color: Colors.black87,
+          onTap: () async {
+            await post.likePost(data.id);
+          },
+          child: Icon(
+            data.isLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
+            color: data.isLiked ? Appcolors.primaryColor : Colors.black87,
             size: 25,
           ),
         ),
         width10,
         Text(
-          like.toString(),
+          data.likes.toString(),
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,

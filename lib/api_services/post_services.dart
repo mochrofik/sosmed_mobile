@@ -34,11 +34,14 @@ class PostServices {
   Future<Response> likePost(int postId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString(Globals.TOKEN_KEY);
-
+    print("postId $postId");
     try {
+      FormData formData = FormData.fromMap({
+        "post_id": postId,
+      });
       final response = await _dio.post(
         "/liked",
-        data: {"post_id": postId},
+        data: formData,
         options: Options(
           headers: {"Authorization": token},
         ),
