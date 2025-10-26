@@ -9,6 +9,7 @@ import 'package:yure_connect_apps/models/post_model.dart';
 import 'package:yure_connect_apps/provider/post_provider.dart';
 import 'package:yure_connect_apps/utils/AppColors.dart';
 import 'package:yure_connect_apps/utils/app_margin.dart';
+import 'package:yure_connect_apps/utils/custom_dialog.dart';
 
 class Posts extends StatelessWidget {
   const Posts({super.key});
@@ -46,7 +47,7 @@ class Posts extends StatelessWidget {
             return SliverList.builder(
                 itemCount: post.list.length,
                 itemBuilder: (context, i) {
-                  return konten(i, post.list[i], post);
+                  return konten(i, post.list[i], post, context);
                 });
           })
         ],
@@ -54,7 +55,7 @@ class Posts extends StatelessWidget {
     );
   }
 
-  konten(indexPos, PostModel data, PostProvider post) {
+  konten(indexPos, PostModel data, PostProvider post, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10, top: 10),
       child: Column(
@@ -63,14 +64,33 @@ class Posts extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               width10,
-              CircleAvatar(
-                maxRadius: 20,
-                backgroundImage: NetworkImage(
-                  "${Globals.urlPostImage}/${data.profile.split("\\").last}",
+              Expanded(
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      maxRadius: 20,
+                      backgroundImage: NetworkImage(
+                        "${Globals.urlPostImage}/${data.profile.split("\\").last}",
+                      ),
+                    ),
+                    width10,
+                    Text(data.user.name),
+                  ],
                 ),
               ),
+              InkWell(
+                child: const Icon(
+                  Icons.more_vert,
+                ),
+                onTap: () {
+                  CustomDialog.confirmDeleteDialog(
+                      context: context,
+                      onPressed: () async {
+                        await post.deletePost(data.id);
+                      });
+                },
+              ),
               width10,
-              Text(data.user.name),
             ],
           ),
           height10,

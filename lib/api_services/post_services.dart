@@ -34,7 +34,6 @@ class PostServices {
   Future<Response> likePost(int postId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString(Globals.TOKEN_KEY);
-    print("postId $postId");
     try {
       FormData formData = FormData.fromMap({
         "post_id": postId,
@@ -42,6 +41,26 @@ class PostServices {
       final response = await _dio.post(
         "/liked",
         data: formData,
+        options: Options(
+          headers: {"Authorization": token},
+        ),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        rethrow;
+      }
+      throw e.response?.data['message'] ?? 'Terjadi kesalahan saat login.';
+    }
+  }
+
+  Future<Response> deletePost(int postId) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString(Globals.TOKEN_KEY);
+    try {
+      final response = await _dio.delete(
+        "/delete/$postId",
         options: Options(
           headers: {"Authorization": token},
         ),

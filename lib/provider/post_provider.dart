@@ -38,7 +38,7 @@ class PostProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         _list.clear();
         notifyListeners();
-        List res = response.data['data'];
+        List res = response.data['data'] ?? [];
         for (var element in res) {
           final user = element['user'];
           List files = element['upload_postings'];
@@ -63,10 +63,11 @@ class PostProvider with ChangeNotifier {
               posting: element['posting'],
               uploadPostings: filesUp,
               user: UserModel(
-                id: user['id'],
-                name: user['name'],
-                email: user['email'],
-              ),
+                  id: user['id'],
+                  name: user['name'],
+                  email: user['email'],
+                  profile: user['profile'],
+                  gender: user['gender']),
               likes: element['likes'],
               profile: user['profile'],
               createdAt: element['created_at'],
@@ -91,6 +92,21 @@ class PostProvider with ChangeNotifier {
     try {
       final response = await postServices.likePost(postId);
       if (response.statusCode == 201) {
+        await mypost();
+      }
+      notifyListeners();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        _isLoggedIn = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> deletePost(int postId) async {
+    try {
+      final response = await postServices.deletePost(postId);
+      if (response.statusCode == 200) {
         await mypost();
       }
       notifyListeners();

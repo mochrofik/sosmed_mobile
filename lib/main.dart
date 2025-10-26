@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yure_connect_apps/api_services/auth_services.dart';
 import 'package:yure_connect_apps/api_services/post_services.dart';
+import 'package:yure_connect_apps/api_services/profile_services.dart';
 import 'package:yure_connect_apps/provider/auth_provider.dart';
 import 'package:yure_connect_apps/provider/home_provider.dart';
 import 'package:yure_connect_apps/provider/post_provider.dart';
+import 'package:yure_connect_apps/provider/profile_provider.dart';
 import 'package:yure_connect_apps/utils/GlobalFunctions.dart';
 import 'package:yure_connect_apps/views/auth/login.dart';
 import 'package:yure_connect_apps/views/auth/splashscreen.dart';
@@ -17,10 +19,12 @@ void main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final AuthServices authServices = AuthServices();
   final PostServices postServices = PostServices();
+  final ProfileServices profileServices = ProfileServices();
   runApp(MyApp(
     authServices: authServices,
     prefs: prefs,
     postServices: postServices,
+    profileServices: profileServices,
   ));
 }
 
@@ -28,12 +32,14 @@ class MyApp extends StatelessWidget {
   final SharedPreferences prefs;
   final AuthServices authServices;
   final PostServices postServices;
+  final ProfileServices profileServices;
 
   const MyApp(
       {super.key,
       required this.prefs,
       required this.authServices,
-      required this.postServices});
+      required this.postServices,
+      required this.profileServices});
 
   // This widget is the root of your application.
   @override
@@ -44,11 +50,12 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthProvider(authServices, prefs),
         ),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => PostProvider(postServices))
+        ChangeNotifierProvider(create: (_) => PostProvider(postServices)),
+        ChangeNotifierProvider(create: (_) => ProfileProvider(profileServices)),
       ],
       child: MaterialApp(
         scaffoldMessengerKey: scaffoldMessengerKey,
-        title: 'Flutter Demo',
+        title: 'YURE Connect',
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Color(0XFF007AFF))),
         home: AuthWrapper(
