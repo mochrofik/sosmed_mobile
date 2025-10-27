@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:yure_connect_apps/provider/home_provider.dart';
 import 'package:yure_connect_apps/provider/post_provider.dart';
 import 'package:yure_connect_apps/utils/AppColors.dart';
+import 'package:yure_connect_apps/views/home/camera_post.dart';
 import 'package:yure_connect_apps/views/home/posts.dart';
 import 'package:yure_connect_apps/views/home/profile.dart';
 
@@ -20,9 +21,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final pages = [
       const Posts(),
-      const Center(
-        child: Text("Kamera"),
-      ),
+      // const Center(
+      //   child: Text("Kamera"),
+      // ),
+      const CameraPost(),
       const Profile(),
     ];
 
@@ -39,7 +41,7 @@ class _HomeState extends State<Home> {
                 homeProvider.currentNavigate(value);
 
                 if (value == 1) {
-                  postProvider.pickImage(ImageSource.gallery);
+                  // postProvider.pickImage(ImageSource.gallery);
                 }
               },
               currentIndex: homeProvider.currentBottomNavigate,

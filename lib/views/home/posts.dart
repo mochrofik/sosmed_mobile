@@ -30,7 +30,7 @@ class Posts extends StatelessWidget {
             backgroundColor: Appcolors.primaryColor,
             floating: true,
             pinned: false,
-            actions: [
+            actions: const [
               Icon(
                 Icons.search,
                 color: Colors.white,
